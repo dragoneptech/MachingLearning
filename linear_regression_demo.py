@@ -2,10 +2,10 @@
 import numpy as np  # NumPy: Numerical Python，用于科学计算和数组操作
 import matplotlib.pyplot as plt
 from sklearn.linear_model import LinearRegression
-import seaborn as sns  # seaborn 是基于 matplotlib 的高级绘图库
+# import seaborn as sns  # seaborn 是基于 matplotlib 的高级绘图库
 
 # 设置图表风格，让图表更好看
-sns.set_style("whitegrid")
+# sns.set_style("whitegrid")
 
 # -------------------------- 设置中文字体 start --------------------------
 # plt.rcParams 中的 rcParams 是 runtime configuration parameters 的缩写，中文可以理解为：
@@ -67,7 +67,7 @@ plt.xlabel('房屋面积（平方米）')
 plt.ylabel('房屋价格（万元）')
 plt.title('机器学习测试 -- 房屋面积与价格关系')
 plt.legend()
-plt.grid(True)
+plt.grid(True, which='both', linestyle='--')
 
 print("线性回归模型训练完成，预测结果可视化已显示。")
 print(f"模型系数（斜率）：{model.coef_[0]:.2f}")
