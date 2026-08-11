@@ -1,11 +1,10 @@
-# from data_preparation import splits
+from data_preparation import splits
 
 # 模型训练示例
-# import numpy as np
 from sklearn.linear_model import LogisticRegression, LinearRegression
 from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
 from sklearn.svm import SVC, SVR
-from sklearn.metrics import accuracy_score, mean_squared_error, classification_report, root_mean_squared_error
+from sklearn.metrics import accuracy_score, mean_squared_error, classification_report
 
 class ModelTrainer:
     def __init__(self):
@@ -72,8 +71,7 @@ class ModelTrainer:
                 
             elif problem_type == 'regression':
                 mse = mean_squared_error(y_test, y_pred)
-                # rmse = np.sqrt(mse)
-                rmse = root_mean_squared_error(y_test, y_pred)
+                rmse = np.sqrt(mse)
                 results[name] = {'mse': mse, 'rmse': rmse}
                 print(f"{name}: MSE = {mse:.4f}, RMSE = {rmse:.4f}")
             
@@ -99,7 +97,7 @@ trainer = ModelTrainer()
 # 注册不同类型的模型
 trainer.register_model('逻辑回归', LogisticRegression(random_state=42), 'classification')
 trainer.register_model('随机森林', RandomForestClassifier(n_estimators=100, random_state=42), 'classification')
-trainer.register_model('支持向量机', SVC(random_state=42), 'classification')
+trainer.register_model('支持向量机', SVC(probability=True, random_state=42), 'classification')
 
 # 创建训练数据
 X_train = splits['X_train']
