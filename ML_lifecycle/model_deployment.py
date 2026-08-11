@@ -154,15 +154,18 @@ model_path = deployer.save_model(best_model, "best_classification_model")
 deployer.load_model("best_classification_model", model_path)
 
 # 创建预测服务
-prediction_service = deployer.create_prediction_service(
-    "best_classification_model", encoders, scaler
-)
+# prediction_service = deployer.create_prediction_service("best_classification_model", encoders, scaler)
+prediction_service = deployer.create_prediction_service("best_classification_model")
 
 # 使用预测服务
 test_input = X_test.head(5)
+# print(test_input)
 prediction_result = prediction_service(test_input)
 print("\n预测结果：")
+# print(prediction_result)
 print(json.dumps(prediction_result, indent=2, ensure_ascii=False))
 
 # 监控模型
-deployer.monitor_model("best_classification_model", test_input, y_test.head(5).values)
+deployer.monitor_model("best_classification_model", test_input, y_test.head(5))
+# print(y_test.head(5))
+# print(y_test.head(5).values)
