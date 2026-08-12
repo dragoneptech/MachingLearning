@@ -67,7 +67,8 @@ class ModelTrainer:
                 print(f"{name}: 准确率 = {accuracy:.4f}")
                 
                 # 详细报告
-                print(classification_report(y_test, y_pred))
+                # print(classification_report(y_test, y_pred))
+                print(classification_report(y_test, y_pred, zero_division=0))
                 
             elif problem_type == 'regression':
                 mse = mean_squared_error(y_test, y_pred)
