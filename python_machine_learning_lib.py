@@ -350,6 +350,7 @@
 # 高级可视化示例
 
 # 高级可视化示例
+# matplotlib 分层布局
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -378,30 +379,16 @@ def advanced_visualization():
     # ============================================================
     fig = plt.figure(figsize=(15, 5))
 
-    outer_gs = fig.add_gridspec(
-        1, 3,
-        width_ratios=[1, 1, 1]
-    )
+    outer_gs = fig.add_gridspec(1, 3, width_ratios=[1, 1, 1])
 
     # ============================================================
     # 1. 气泡图
     # ============================================================
     ax_bubble = fig.add_subplot(outer_gs[0, 0])
 
-    scatter = ax_bubble.scatter(
-        x,
-        y,
-        c=colors,
-        s=sizes,
-        alpha=0.6,
-        cmap='viridis'
-    )
+    scatter = ax_bubble.scatter(x, y, c=colors, s=sizes, alpha=0.6, cmap='viridis')
 
-    fig.colorbar(
-        scatter,
-        ax=ax_bubble,
-        label='颜色值'
-    )
+    fig.colorbar(scatter, ax=ax_bubble, label='颜色值')
 
     ax_bubble.set_title('气泡图')
     ax_bubble.set_xlabel('X')
@@ -433,69 +420,33 @@ def advanced_visualization():
     #
     # 修改2：在外层第3列中创建嵌套的 2×2 GridSpec
     # ============================================================
-    inner_gs = outer_gs[0, 2].subgridspec(
-        2,
-        2,
-        hspace=0.5,
-        wspace=0.4
-    )
+    inner_gs = outer_gs[0, 2].subgridspec(2, 2, hspace=0.5, wspace=0.4)
 
     # ------------------------------------------------------------
     # 3.1 极坐标图
     # ------------------------------------------------------------
-    ax1 = fig.add_subplot(
-        inner_gs[0, 0],
-        projection='polar'
-    )
+    ax1 = fig.add_subplot(inner_gs[0, 0], projection='polar')
 
-    theta = np.linspace(
-        0,
-        2 * np.pi,
-        100
-    )
+    theta = np.linspace(0, 2 * np.pi, 100)
 
-    r = np.sin(
-        3 * theta
-    )
+    r = np.sin(3 * theta)
 
-    ax1.plot(
-        theta,
-        r
-    )
+    ax1.plot(theta, r)
 
-    ax1.set_title(
-        '极坐标图'
-    )
+    ax1.set_title('极坐标图')
 
     # ------------------------------------------------------------
     # 3.2 柱状图
     # ------------------------------------------------------------
-    ax2 = fig.add_subplot(
-        inner_gs[0, 1]
-    )
+    ax2 = fig.add_subplot(inner_gs[0, 1])
 
-    categories = [
-        'A',
-        'B',
-        'C',
-        'D'
-    ]
+    categories = ['A', 'B', 'C', 'D']
 
-    values = [
-        15,
-        30,
-        45,
-        10
-    ]
+    values = [15, 30, 45, 10]
 
-    ax2.bar(
-        categories,
-        values
-    )
+    ax2.bar(categories, values)
 
-    ax2.set_title(
-        '柱状图'
-    )
+    ax2.set_title('柱状图')
 
     # ------------------------------------------------------------
     # 3.3 组合折线图
@@ -503,39 +454,19 @@ def advanced_visualization():
     # 修改3：使用 inner_gs[1, :]
     # 让该图占据第二行的两列
     # ------------------------------------------------------------
-    ax3 = fig.add_subplot(
-        inner_gs[1, :]
-    )
+    ax3 = fig.add_subplot(inner_gs[1, :])
 
-    x_line = np.linspace(
-        0,
-        10,
-        100
-    )
+    x_line = np.linspace(0, 10, 100)
 
-    y_line1 = np.sin(
-        x_line
-    )
+    y_line1 = np.sin(x_line)
 
-    y_line2 = np.cos(
-        x_line
-    )
+    y_line2 = np.cos(x_line)
 
-    ax3.plot(
-        x_line,
-        y_line1,
-        label='sin'
-    )
+    ax3.plot(x_line, y_line1, label='sin')
 
-    ax3.plot(
-        x_line,
-        y_line2,
-        label='cos'
-    )
+    ax3.plot(x_line, y_line2, label='cos')
 
-    ax3.set_title(
-        '组合图'
-    )
+    ax3.set_title('组合图')
 
     ax3.legend()
 
