@@ -249,7 +249,7 @@
 #     print("\n=== 特定数据筛选 ===")
     
 #     # 优秀学生（平均分 > 85）
-#     excellent_students = df[df['平均分'] > 85].head(5)
+#     excellent_students = df[df['平均分'] > 85].sort_values('平均分', ascending=False).head(5)
 #     print("优秀学生（前5名）：")
 #     print(excellent_students[['姓名', '平均分', '等级']])
     
