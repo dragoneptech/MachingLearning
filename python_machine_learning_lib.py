@@ -263,13 +263,292 @@
 # # 运行示例
 # student_df = pandas_data_processing()
 
+# Matplotlib：数据可视化的画笔
+
+# Matplotlib 基础图表
+
+# Matplotlib 基础图表示例
+# import matplotlib.pyplot as plt
+# import numpy as np
+
+# # 设置中文字体（防止中文显示为方框）
+# plt.rcParams['font.sans-serif'] = ['SimHei', 'Arial Unicode MS']
+# plt.rcParams['axes.unicode_minus'] = False
+
+# def matplotlib_basic_charts():
+#     """演示 Matplotlib 基础图表"""
+    
+#     print("=== Matplotlib 基础图表示例 ===")
+    
+#     # 1. 折线图
+#     plt.figure(figsize=(12, 8))
+    
+#     plt.subplot(2, 3, 1)
+#     x = np.linspace(0, 10, 100)
+#     y1 = np.sin(x)
+#     y2 = np.cos(x)
+#     plt.plot(x, y1, label='sin(x)')
+#     plt.plot(x, y2, label='cos(x)')
+#     plt.title('三角函数')
+#     plt.xlabel('x')
+#     plt.ylabel('y')
+#     plt.legend()
+#     plt.grid(True)
+    
+#     # 2. 散点图
+#     plt.subplot(2, 3, 2)
+#     np.random.seed(42)
+#     x = np.random.randn(100)
+#     y = 2 * x + np.random.randn(100) * 0.5
+#     plt.scatter(x, y, alpha=0.6, c='blue')
+#     plt.title('散点图')
+#     plt.xlabel('X')
+#     plt.ylabel('Y')
+    
+#     # 3. 柱状图
+#     plt.subplot(2, 3, 3)
+#     categories = ['A', 'B', 'C', 'D', 'E']
+#     values = [23, 45, 56, 78, 32]
+#     plt.bar(categories, values, color=['red', 'green', 'blue', 'orange', 'purple'])
+#     plt.title('柱状图')
+#     plt.xlabel('类别')
+#     plt.ylabel('数值')
+    
+#     # 4. 直方图
+#     plt.subplot(2, 3, 4)
+#     data = np.random.normal(100, 15, 1000)
+#     plt.hist(data, bins=30, alpha=0.7, color='skyblue', edgecolor='black')
+#     plt.title('直方图')
+#     plt.xlabel('数值')
+#     plt.ylabel('频数')
+    
+#     # 5. 饼图
+#     plt.subplot(2, 3, 5)
+#     sizes = [30, 25, 20, 15, 10]
+#     labels = ['A', 'B', 'C', 'D', 'E']
+#     colors = ['gold', 'lightcoral', 'lightskyblue', 'lightgreen', 'plum']
+#     plt.pie(sizes, labels=labels, colors=colors, autopct='%1.1f%%', startangle=90)
+#     plt.title('饼图')
+    
+#     # 6. 箱线图
+#     plt.subplot(2, 3, 6)
+#     data1 = np.random.normal(0, 1, 100)
+#     data2 = np.random.normal(2, 1, 100)
+#     data3 = np.random.normal(-2, 1, 100)
+#     plt.boxplot([data1, data2, data3], label=['组1', '组2', '组3'])
+#     plt.title('箱线图')
+#     plt.ylabel('数值')
+    
+#     plt.tight_layout()
+#     plt.show()
+    
+#     print("图表已显示！")
+
+# # 运行示例
+# matplotlib_basic_charts()
+
+# 高级可视化示例
+
+# 高级可视化示例
+import matplotlib.pyplot as plt
+import numpy as np
 
 
+def advanced_visualization():
+    """演示高级可视化技巧"""
+
+    # 设置中文字体（防止中文显示为方框）
+    plt.rcParams['font.sans-serif'] = ['SimHei', 'Arial Unicode MS']
+    plt.rcParams['axes.unicode_minus'] = False
+
+    print("=== 高级可视化示例 ===")
+
+    # 创建更复杂的数据
+    np.random.seed(42)
+    n_points = 200
+
+    # 生成相关数据
+    x = np.random.randn(n_points)
+    y = 2 * x + np.random.randn(n_points) * 0.5
+    colors = np.random.rand(n_points)
+    sizes = 1000 * np.random.rand(n_points)
+
+    # ============================================================
+    # 修改1：创建 Figure，并建立外层 1×3 GridSpec
+    # ============================================================
+    fig = plt.figure(figsize=(15, 5))
+
+    outer_gs = fig.add_gridspec(
+        1, 3,
+        width_ratios=[1, 1, 1]
+    )
+
+    # ============================================================
+    # 1. 气泡图
+    # ============================================================
+    ax_bubble = fig.add_subplot(outer_gs[0, 0])
+
+    scatter = ax_bubble.scatter(
+        x,
+        y,
+        c=colors,
+        s=sizes,
+        alpha=0.6,
+        cmap='viridis'
+    )
+
+    fig.colorbar(
+        scatter,
+        ax=ax_bubble,
+        label='颜色值'
+    )
+
+    ax_bubble.set_title('气泡图')
+    ax_bubble.set_xlabel('X')
+    ax_bubble.set_ylabel('Y')
+
+    # ============================================================
+    # 2. 热力图
+    # ============================================================
+    ax_heatmap = fig.add_subplot(outer_gs[0, 1])
+
+    data = np.random.randn(10, 10)
+
+    im = ax_heatmap.imshow(
+        data,
+        cmap='coolwarm',
+        aspect='auto'
+    )
+
+    fig.colorbar(
+        im,
+        ax=ax_heatmap,
+        label='数值'
+    )
+
+    ax_heatmap.set_title('热力图')
+
+    # ============================================================
+    # 3. 子图组合
+    #
+    # 修改2：在外层第3列中创建嵌套的 2×2 GridSpec
+    # ============================================================
+    inner_gs = outer_gs[0, 2].subgridspec(
+        2,
+        2,
+        hspace=0.5,
+        wspace=0.4
+    )
+
+    # ------------------------------------------------------------
+    # 3.1 极坐标图
+    # ------------------------------------------------------------
+    ax1 = fig.add_subplot(
+        inner_gs[0, 0],
+        projection='polar'
+    )
+
+    theta = np.linspace(
+        0,
+        2 * np.pi,
+        100
+    )
+
+    r = np.sin(
+        3 * theta
+    )
+
+    ax1.plot(
+        theta,
+        r
+    )
+
+    ax1.set_title(
+        '极坐标图'
+    )
+
+    # ------------------------------------------------------------
+    # 3.2 柱状图
+    # ------------------------------------------------------------
+    ax2 = fig.add_subplot(
+        inner_gs[0, 1]
+    )
+
+    categories = [
+        'A',
+        'B',
+        'C',
+        'D'
+    ]
+
+    values = [
+        15,
+        30,
+        45,
+        10
+    ]
+
+    ax2.bar(
+        categories,
+        values
+    )
+
+    ax2.set_title(
+        '柱状图'
+    )
+
+    # ------------------------------------------------------------
+    # 3.3 组合折线图
+    #
+    # 修改3：使用 inner_gs[1, :]
+    # 让该图占据第二行的两列
+    # ------------------------------------------------------------
+    ax3 = fig.add_subplot(
+        inner_gs[1, :]
+    )
+
+    x_line = np.linspace(
+        0,
+        10,
+        100
+    )
+
+    y_line1 = np.sin(
+        x_line
+    )
+
+    y_line2 = np.cos(
+        x_line
+    )
+
+    ax3.plot(
+        x_line,
+        y_line1,
+        label='sin'
+    )
+
+    ax3.plot(
+        x_line,
+        y_line2,
+        label='cos'
+    )
+
+    ax3.set_title(
+        '组合图'
+    )
+
+    ax3.legend()
+
+    # ============================================================
+    # 自动调整布局
+    # ============================================================
+    plt.tight_layout()
+
+    plt.show()
+
+    print("高级图表已显示！")
 
 
-
-
-
-
-
+# 运行示例
+advanced_visualization()
 
