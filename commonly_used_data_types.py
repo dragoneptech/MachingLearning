@@ -473,11 +473,14 @@ class TextDataProcessor:
         """特征提取"""
         # 文本预处理
         cleaned_texts = [self.clean_text(text) for text in texts]
+
+        def chinese_tokenizer(text):
+            return self.tokenize_chinese(text)
         
-        if method == 'tfidf':
-            vectorizer = TfidfVectorizer(max_features=1000, token_pattern=r'(?u)\b\w+\b')
+        if method == 'tfidf':         
+            vectorizer = TfidfVectorizer(max_features=1000, tokenizer=chinese_tokenizer, token_pattern=None)
         elif method == 'count':
-            vectorizer = CountVectorizer(max_features=1000, token_pattern=r'(?u)\b\w+\b')
+            vectorizer = CountVectorizer(max_features=1000, tokenizer=chinese_tokenizer, token_pattern=None)
         else:
             raise ValueError("方法必须是 'tfidf' 或 'count'")
         
