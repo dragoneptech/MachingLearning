@@ -351,135 +351,550 @@
 
 # 高级可视化示例
 # matplotlib 分层布局
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
+# import numpy as np
+
+
+# def advanced_visualization():
+#     """演示高级可视化技巧"""
+
+#     # 设置中文字体（防止中文显示为方框）
+#     plt.rcParams['font.sans-serif'] = ['SimHei', 'Arial Unicode MS']
+#     plt.rcParams['axes.unicode_minus'] = False
+
+#     print("=== 高级可视化示例 ===")
+
+#     # 创建更复杂的数据
+#     np.random.seed(42)
+#     n_points = 200
+
+#     # 生成相关数据
+#     x = np.random.randn(n_points)
+#     y = 2 * x + np.random.randn(n_points) * 0.5
+#     colors = np.random.rand(n_points)
+#     sizes = 1000 * np.random.rand(n_points)
+
+#     # ============================================================
+#     # 修改1：创建 Figure，并建立外层 1×3 GridSpec
+#     # ============================================================
+#     fig = plt.figure(figsize=(15, 5))
+
+#     outer_gs = fig.add_gridspec(1, 3, width_ratios=[1, 1, 1])
+
+#     # ============================================================
+#     # 1. 气泡图
+#     # ============================================================
+#     ax_bubble = fig.add_subplot(outer_gs[0, 0])
+
+#     scatter = ax_bubble.scatter(x, y, c=colors, s=sizes, alpha=0.6, cmap='viridis')
+
+#     fig.colorbar(scatter, ax=ax_bubble, label='颜色值')
+
+#     ax_bubble.set_title('气泡图')
+#     ax_bubble.set_xlabel('X')
+#     ax_bubble.set_ylabel('Y')
+
+#     # ============================================================
+#     # 2. 热力图
+#     # ============================================================
+#     ax_heatmap = fig.add_subplot(outer_gs[0, 1])
+
+#     data = np.random.randn(10, 10)
+
+#     im = ax_heatmap.imshow(
+#         data,
+#         cmap='coolwarm',
+#         aspect='auto'
+#     )
+
+#     fig.colorbar(
+#         im,
+#         ax=ax_heatmap,
+#         label='数值'
+#     )
+
+#     ax_heatmap.set_title('热力图')
+
+#     # ============================================================
+#     # 3. 子图组合
+#     #
+#     # 修改2：在外层第3列中创建嵌套的 2×2 GridSpec
+#     # ============================================================
+#     inner_gs = outer_gs[0, 2].subgridspec(2, 2, hspace=0.5, wspace=0.4)
+
+#     # ------------------------------------------------------------
+#     # 3.1 极坐标图
+#     # ------------------------------------------------------------
+#     ax1 = fig.add_subplot(inner_gs[0, 0], projection='polar')
+
+#     theta = np.linspace(0, 2 * np.pi, 100)
+
+#     r = np.sin(3 * theta)
+
+#     ax1.plot(theta, r)
+
+#     ax1.set_title('极坐标图')
+
+#     # ------------------------------------------------------------
+#     # 3.2 柱状图
+#     # ------------------------------------------------------------
+#     ax2 = fig.add_subplot(inner_gs[0, 1])
+
+#     categories = ['A', 'B', 'C', 'D']
+
+#     values = [15, 30, 45, 10]
+
+#     ax2.bar(categories, values)
+
+#     ax2.set_title('柱状图')
+
+#     # ------------------------------------------------------------
+#     # 3.3 组合折线图
+#     #
+#     # 修改3：使用 inner_gs[1, :]
+#     # 让该图占据第二行的两列
+#     # ------------------------------------------------------------
+#     ax3 = fig.add_subplot(inner_gs[1, :])
+
+#     x_line = np.linspace(0, 10, 100)
+
+#     y_line1 = np.sin(x_line)
+
+#     y_line2 = np.cos(x_line)
+
+#     ax3.plot(x_line, y_line1, label='sin')
+
+#     ax3.plot(x_line, y_line2, label='cos')
+
+#     ax3.set_title('组合图')
+
+#     ax3.legend()
+
+#     # ============================================================
+#     # 自动调整布局
+#     # ============================================================
+#     plt.tight_layout()
+
+#     plt.show()
+
+#     print("高级图表已显示！")
+
+
+# # 运行示例
+# advanced_visualization()
+
+# Scikit-learn：机器学习的瑞士军刀
+
+# Scikit-learn 就像是机器学习的工具箱
+# 提供了从数据预处理到模型训练、评估的完整工具链，是 Python 机器学习的事实标准
+
+
+# Scikit-learn 核心功能
+
+
+# import numpy as np
+
+# # Scikit-learn 核心功能示例
+# from sklearn.datasets import make_classification, load_iris
+# from sklearn.model_selection import train_test_split
+# from sklearn.preprocessing import StandardScaler, LabelEncoder
+# from sklearn.linear_model import LogisticRegression
+# from sklearn.ensemble import RandomForestClassifier
+# from sklearn.svm import SVC
+# from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+
+# def scikit_learn_basics():
+#     """演示 Scikit-learn 的核心功能"""
+    
+#     print("\n=== Scikit-learn 核心功能示例 ===\n")
+    
+#     # 1. 数据生成
+#     X, y = make_classification(
+#         n_samples=1000, 
+#         n_features=20, 
+#         n_classes=3, 
+#         n_informative=15,
+#         random_state=42
+#     )
+    
+#     print(f"数据形状：X={X.shape}, y={y.shape}")
+#     print(f"类别分布：{np.bincount(y)}")
+    
+#     # 2. 数据划分
+#     X_train, X_test, y_train, y_test = train_test_split(
+#         X, y, test_size=0.2, random_state=42, stratify=y
+#     )
+    
+#     print(f"训练集大小：{X_train.shape[0]}")
+#     print(f"测试集大小：{X_test.shape[0]}")
+    
+#     # 3. 数据预处理
+#     scaler = StandardScaler()
+#     X_train_scaled = scaler.fit_transform(X_train)
+#     X_test_scaled = scaler.transform(X_test)
+    
+#     print("数据标准化完成")
+    
+#     # 4. 模型训练和比较
+#     models = {
+#         '逻辑回归': LogisticRegression(random_state=42),
+#         '随机森林': RandomForestClassifier(n_estimators=100, random_state=42),
+#         '支持向量机': SVC(random_state=42)
+#     }
+    
+#     results = {}
+    
+#     for name, model in models.items():
+#         print(f"\n训练 {name}...")
+        
+#         # 训练模型
+#         model.fit(X_train_scaled, y_train)
+        
+#         # 预测
+#         y_pred = model.predict(X_test_scaled)
+        
+#         # 评估
+#         accuracy = accuracy_score(y_test, y_pred)
+#         results[name] = accuracy
+        
+#         print(f"{name} 准确率：{accuracy:.4f}")
+#         print(f"分类报告：\n{classification_report(y_test, y_pred)}")
+    
+#     # 5. 结果比较
+#     print("\n=== 模型比较 ===")
+#     for name, accuracy in results.items():
+#         print(f"{name}: {accuracy:.4f}")
+    
+#     best_model = max(results, key=results.get)
+#     print(f"\n最佳模型：{best_model}")
+    
+#     return models[best_model]
+
+# # 运行示例
+# best_model = scikit_learn_basics()
+
+
+# 完整的机器学习流程
+
+# 完整的机器学习流程示例
+# from sklearn.datasets import load_iris
+# from sklearn.model_selection import train_test_split
+# from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+# import pandas as pd
+# import matplotlib.pyplot as plt
+
+# # -------------------------- 设置中文字体 start --------------------------
+# plt.rcParams['font.sans-serif'] = [
+#     # Windows 优先
+#     'SimHei', 'Microsoft YaHei',
+#     # macOS 优先
+#     'PingFang SC', 'Heiti TC',
+#     # Linux 优先
+#     'WenQuanYi Micro Hei', 'DejaVu Sans'
+# ]
+# # 修复负号显示为方块的问题
+# plt.rcParams['axes.unicode_minus'] = False
+# # -------------------------- 设置中文字体 end --------------------------
+
+# def complete_ml_pipeline():
+#     """演示完整的机器学习流程"""
+    
+#     print("=== 完整机器学习流程 ===")
+    
+#     # 1. 加载数据
+#     iris = load_iris()
+#     X = iris.data
+#     y = iris.target
+#     feature_names = iris.feature_names
+#     target_names = iris.target_names
+    
+#     print(f"数据集：{iris.DESCR.split('\n')[0]}")
+#     print(f"特征数量：{len(feature_names)}")
+#     print(f"类别数量：{len(target_names)}")
+    
+#     # 2. 数据探索
+#     df = pd.DataFrame(X, columns=feature_names)
+#     df['target'] = y
+    
+#     print("\n数据预览：")
+#     print(df.head())
+    
+#     print("\n数据统计：")
+#     print(df.describe())
+    
+#     # 3. 数据可视化
+#     plt.figure(figsize=(12, 4))
+    
+#     plt.subplot(1, 2, 1)
+#     for i, target_name in enumerate(target_names):
+#         plt.scatter(
+#             df[df['target'] == i]['sepal length (cm)'],
+#             df[df['target'] == i]['sepal width (cm)'],
+#             label=target_name
+#         )
+#     plt.xlabel('花萼长度')
+#     plt.ylabel('花萼宽度')
+#     plt.title('花萼尺寸分布')
+#     plt.legend()
+    
+#     plt.subplot(1, 2, 2)
+#     for i, target_name in enumerate(target_names):
+#         plt.scatter(
+#             df[df['target'] == i]['petal length (cm)'],
+#             df[df['target'] == i]['petal width (cm)'],
+#             label=target_name
+#         )
+#     plt.xlabel('花瓣长度')
+#     plt.ylabel('花瓣宽度')
+#     plt.title('花瓣尺寸分布')
+#     plt.legend()
+    
+#     plt.tight_layout()
+#     plt.show()
+    
+#     # 4. 数据准备
+#     X_train, X_test, y_train, y_test = train_test_split(
+#         X, y, test_size=0.3, random_state=42, stratify=y
+#     )
+    
+#     # 5. 模型训练
+#     from sklearn.ensemble import RandomForestClassifier
+#     model = RandomForestClassifier(n_estimators=100, random_state=42)
+#     model.fit(X_train, y_train)
+    
+#     # 6. 模型评估
+#     y_pred = model.predict(X_test)
+#     accuracy = accuracy_score(y_test, y_pred)
+    
+#     print(f"\n模型准确率：{accuracy:.4f}")
+#     print("\n混淆矩阵：")
+#     print(confusion_matrix(y_test, y_pred))
+#     print("\n分类报告：")
+#     print(classification_report(y_test, y_pred, target_names=target_names))
+    
+#     # 7. 特征重要性
+#     feature_importance = model.feature_importances_
+#     feature_df = pd.DataFrame({
+#         '特征': feature_names,
+#         '重要性': feature_importance
+#     }).sort_values('重要性', ascending=False)
+    
+#     print("\n特征重要性：")
+#     print(feature_df)
+    
+#     # 8. 特征重要性可视化
+#     plt.figure(figsize=(8, 4))
+#     plt.bar(feature_df['特征'], feature_df['重要性'])
+#     plt.title('特征重要性')
+#     plt.xlabel('特征')
+#     plt.ylabel('重要性')
+#     plt.xticks(rotation=45)
+#     plt.tight_layout()
+#     plt.show()
+    
+#     return model, feature_df
+
+# # 运行示例
+# trained_model, feature_importance = complete_ml_pipeline()
+
+
+# 四库协同工作示例
+
+
+# 四库协同工作：完整的机器学习项目
+
 import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
 
+# -------------------------- 设置中文字体 start --------------------------
+plt.rcParams['font.sans-serif'] = [
+    # Windows 优先
+    'SimHei', 'Microsoft YaHei',
+    # macOS 优先
+    'PingFang SC', 'Heiti TC',
+    # Linux 优先
+    'WenQuanYi Micro Hei', 'DejaVu Sans'
+]
+# 修复负号显示为方块的问题
+plt.rcParams['axes.unicode_minus'] = False
+# -------------------------- 设置中文字体 end --------------------------
 
-def advanced_visualization():
-    """演示高级可视化技巧"""
-
-    # 设置中文字体（防止中文显示为方框）
-    plt.rcParams['font.sans-serif'] = ['SimHei', 'Arial Unicode MS']
-    plt.rcParams['axes.unicode_minus'] = False
-
-    print("=== 高级可视化示例 ===")
-
-    # 创建更复杂的数据
+def four_libraries_integration():
+    """演示 NumPy、Pandas、Matplotlib、Scikit-learn 的协同工作"""
+    
+    print("=== 四库协同工作示例 ===")
+    
+    # 1. NumPy：生成模拟数据
     np.random.seed(42)
-    n_points = 200
-
-    # 生成相关数据
-    x = np.random.randn(n_points)
-    y = 2 * x + np.random.randn(n_points) * 0.5
-    colors = np.random.rand(n_points)
-    sizes = 1000 * np.random.rand(n_points)
-
-    # ============================================================
-    # 修改1：创建 Figure，并建立外层 1×3 GridSpec
-    # ============================================================
-    fig = plt.figure(figsize=(15, 5))
-
-    outer_gs = fig.add_gridspec(1, 3, width_ratios=[1, 1, 1])
-
-    # ============================================================
-    # 1. 气泡图
-    # ============================================================
-    ax_bubble = fig.add_subplot(outer_gs[0, 0])
-
-    scatter = ax_bubble.scatter(x, y, c=colors, s=sizes, alpha=0.6, cmap='viridis')
-
-    fig.colorbar(scatter, ax=ax_bubble, label='颜色值')
-
-    ax_bubble.set_title('气泡图')
-    ax_bubble.set_xlabel('X')
-    ax_bubble.set_ylabel('Y')
-
-    # ============================================================
-    # 2. 热力图
-    # ============================================================
-    ax_heatmap = fig.add_subplot(outer_gs[0, 1])
-
-    data = np.random.randn(10, 10)
-
-    im = ax_heatmap.imshow(
-        data,
-        cmap='coolwarm',
-        aspect='auto'
+    n_samples = 500
+    
+    # 生成特征
+    study_hours = np.random.uniform(1, 10, n_samples)  # 学习时间
+    sleep_hours = np.random.uniform(5, 9, n_samples)   # 睡眠时间
+    practice_tests = np.random.randint(0, 20, n_samples) # 练习题数量
+    
+    # 生成标签（考试成绩），基于特征的线性组合加噪声
+    exam_scores = (
+        5 * study_hours + 
+        3 * sleep_hours + 
+        2 * practice_tests + 
+        np.random.normal(0, 10, n_samples)
     )
-
-    fig.colorbar(
-        im,
-        ax=ax_heatmap,
-        label='数值'
-    )
-
-    ax_heatmap.set_title('热力图')
-
-    # ============================================================
-    # 3. 子图组合
-    #
-    # 修改2：在外层第3列中创建嵌套的 2×2 GridSpec
-    # ============================================================
-    inner_gs = outer_gs[0, 2].subgridspec(2, 2, hspace=0.5, wspace=0.4)
-
-    # ------------------------------------------------------------
-    # 3.1 极坐标图
-    # ------------------------------------------------------------
-    ax1 = fig.add_subplot(inner_gs[0, 0], projection='polar')
-
-    theta = np.linspace(0, 2 * np.pi, 100)
-
-    r = np.sin(3 * theta)
-
-    ax1.plot(theta, r)
-
-    ax1.set_title('极坐标图')
-
-    # ------------------------------------------------------------
-    # 3.2 柱状图
-    # ------------------------------------------------------------
-    ax2 = fig.add_subplot(inner_gs[0, 1])
-
-    categories = ['A', 'B', 'C', 'D']
-
-    values = [15, 30, 45, 10]
-
-    ax2.bar(categories, values)
-
-    ax2.set_title('柱状图')
-
-    # ------------------------------------------------------------
-    # 3.3 组合折线图
-    #
-    # 修改3：使用 inner_gs[1, :]
-    # 让该图占据第二行的两列
-    # ------------------------------------------------------------
-    ax3 = fig.add_subplot(inner_gs[1, :])
-
-    x_line = np.linspace(0, 10, 100)
-
-    y_line1 = np.sin(x_line)
-
-    y_line2 = np.cos(x_line)
-
-    ax3.plot(x_line, y_line1, label='sin')
-
-    ax3.plot(x_line, y_line2, label='cos')
-
-    ax3.set_title('组合图')
-
-    ax3.legend()
-
-    # ============================================================
-    # 自动调整布局
-    # ============================================================
+    
+    # 确保分数在 0-100 范围内
+    exam_scores = np.clip(exam_scores, 0, 100)
+    
+    # 2. Pandas：创建数据框并进行数据处理
+    df = pd.DataFrame({
+        '学习时间': study_hours,
+        '睡眠时间': sleep_hours,
+        '练习题数': practice_tests,
+        '考试成绩': exam_scores
+    })
+    
+    # 添加等级列
+    df['等级'] = pd.cut(df['考试成绩'], 
+                       bins=[0, 60, 70, 80, 90, 100], 
+                       labels=['F', 'D', 'C', 'B', 'A'])
+    
+    print("数据预览：")
+    print(df.head())
+    print(f"\n数据形状：{df.shape}")
+    print(f"\n等级分布：")
+    print(df['等级'].value_counts().sort_index())
+    
+    # 3. Matplotlib：数据可视化
+    plt.figure(figsize=(15, 10))
+    
+    # 子图1：特征分布
+    plt.subplot(2, 3, 1)
+    df[['学习时间', '睡眠时间', '练习题数']].plot.hist(bins=20, ax=plt.gca(), alpha=0.6)
+    plt.title('特征分布')
+    
+    # 子图2：成绩分布
+    plt.subplot(2, 3, 2)
+    plt.hist(df['考试成绩'], bins=20, alpha=0.7, color='skyblue')
+    plt.title('考试成绩分布')
+    plt.xlabel('分数')
+    plt.ylabel('频数')
+    
+    # 子图3：学习时间 vs 成绩
+    plt.subplot(2, 3, 3)
+    plt.scatter(df['学习时间'], df['考试成绩'], alpha=0.6)
+    plt.xlabel('学习时间')
+    plt.ylabel('考试成绩')
+    plt.title('学习时间与成绩关系')
+    
+    # 子图4：睡眠时间 vs 成绩
+    plt.subplot(2, 3, 4)
+    plt.scatter(df['睡眠时间'], df['考试成绩'], alpha=0.6, color='orange')
+    plt.xlabel('睡眠时间')
+    plt.ylabel('考试成绩')
+    plt.title('睡眠时间与成绩关系')
+    
+    # 子图5：练习题数 vs 成绩
+    plt.subplot(2, 3, 5)
+    plt.scatter(df['练习题数'], df['考试成绩'], alpha=0.6, color='green')
+    plt.xlabel('练习题数')
+    plt.ylabel('考试成绩')
+    plt.title('练习题数与成绩关系')
+    
+    # 子图6：等级分布饼图
+    plt.subplot(2, 3, 6)
+    grade_counts = df['等级'].value_counts()
+    plt.pie(grade_counts.values, labels=grade_counts.index, autopct='%1.1f%%')
+    plt.title('等级分布')
+    
     plt.tight_layout()
-
     plt.show()
+    
+    # 4. Scikit-learn：机器学习建模
+    from sklearn.linear_model import LinearRegression
+    from sklearn.ensemble import RandomForestRegressor
+    from sklearn.metrics import mean_squared_error, r2_score
+    
+    # 准备数据
+    X = df[['学习时间', '睡眠时间', '练习题数']]
+    y = df['考试成绩']
+    
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.2, random_state=42
+    )
+    
+    # 训练线性回归模型
+    lr_model = LinearRegression()
+    lr_model.fit(X_train, y_train)
+    lr_pred = lr_model.predict(X_test)
+    lr_mse = mean_squared_error(y_test, lr_pred)
+    lr_r2 = r2_score(y_test, lr_pred)
+    
+    # 训练随机森林模型
+    rf_model = RandomForestRegressor(n_estimators=100, random_state=42)
+    rf_model.fit(X_train, y_train)
+    rf_pred = rf_model.predict(X_test)
+    rf_mse = mean_squared_error(y_test, rf_pred)
+    rf_r2 = r2_score(y_test, rf_pred)
+    
+    # 模型比较
+    print("\n=== 模型比较 ===")
+    print(f"线性回归：MSE={lr_mse:.2f}, R²={lr_r2:.4f}")
+    print(f"随机森林：MSE={rf_mse:.2f}, R²={rf_r2:.4f}")
+    
+    # 线性回归系数
+    print(f"\n线性回归系数：")
+    for feature, coef in zip(X.columns, lr_model.coef_):
+        print(f"{feature}: {coef:.2f}")
+    
+    # 随机森林特征重要性
+    print(f"\n随机森林特征重要性：")
+    for feature, importance in zip(X.columns, rf_model.feature_importances_):
+        print(f"{feature}: {importance:.4f}")
+    
+    # 预测结果可视化
+    plt.figure(figsize=(12, 5))
+    
+    plt.subplot(1, 2, 1)
+    plt.scatter(y_test, lr_pred, alpha=0.6)
+    plt.plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 'r--')
+    plt.xlabel('真实成绩')
+    plt.ylabel('预测成绩')
+    plt.title('线性回归预测结果')
+    
+    plt.subplot(1, 2, 2)
+    plt.scatter(y_test, rf_pred, alpha=0.6)
+    plt.plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 'r--')
+    plt.xlabel('真实成绩')
+    plt.ylabel('预测成绩')
+    plt.title('随机森林预测结果')
+    
+    plt.tight_layout()
+    plt.show()
+    
+    return {
+        'data': df,
+        'linear_model': lr_model,
+        'rf_model': rf_model,
+        'linear_metrics': {'mse': lr_mse, 'r2': lr_r2},
+        'rf_metrics': {'mse': rf_mse, 'r2': rf_r2}
+    }
 
-    print("高级图表已显示！")
+# 运行完整示例
+results = four_libraries_integration()
 
 
-# 运行示例
-advanced_visualization()
+
+
+
+
+
+
+
+
+
+
+
+
+
 
