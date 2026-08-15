@@ -392,149 +392,304 @@
 # 2. 非结构化文本数据
 
 # 非结构化文本数据示例
-import pandas as pd
+# import pandas as pd
 
-def unstructured_text_example():
-    """非结构化文本数据示例"""
+# def unstructured_text_example():
+#     """非结构化文本数据示例"""
     
-    print("\n=== 非结构化文本数据示例 ===")
+#     print("\n=== 非结构化文本数据示例 ===")
     
-    # 创建非结构化文本数据
-    unstructured_texts = [
-        """
-        人工智能技术正在快速发展，深度学习、机器学习、自然语言处理等领域取得了重大突破。
-        这些技术在医疗、金融、教育、交通等多个行业都有广泛应用，为社会发展带来了新的机遇。
-        未来，随着计算能力的提升和算法的改进，人工智能将在更多领域发挥重要作用。
-        """,
-        """
-        今天天气真好，阳光明媚，微风徐徐。我决定去公园散步，享受这美好的时光。
-        公园里有很多花，红的、黄的、紫的，五颜六色，非常美丽。小鸟在树上歌唱，
-        蝴蝶在花丛中飞舞，一切都显得那么和谐自然。
-        """,
-        """
-        股市今天表现强劲，上证指数上涨2.3%，深证成指上涨1.8%。
-        科技股领涨，多只股票涨停。分析师认为，这主要得益于近期出台的利好政策。
-        投资者信心得到提振，市场交投活跃，成交量明显放大。
-        """,
-        """
-        健康生活方式包括合理饮食、适量运动、充足睡眠和良好心态。
-        建议每天摄入蔬菜水果，减少油腻食物；每周至少运动3次，每次30分钟以上；
-        保证7-8小时睡眠；学会调节情绪，保持积极乐观的心态。
-        """
-    ]
+#     # 创建非结构化文本数据
+#     unstructured_texts = [
+#         """
+#         人工智能技术正在快速发展，深度学习、机器学习、自然语言处理等领域取得了重大突破。
+#         这些技术在医疗、金融、教育、交通等多个行业都有广泛应用，为社会发展带来了新的机遇。
+#         未来，随着计算能力的提升和算法的改进，人工智能将在更多领域发挥重要作用。
+#         """,
+#         """
+#         今天天气真好，阳光明媚，微风徐徐。我决定去公园散步，享受这美好的时光。
+#         公园里有很多花，红的、黄的、紫的，五颜六色，非常美丽。小鸟在树上歌唱，
+#         蝴蝶在花丛中飞舞，一切都显得那么和谐自然。
+#         """,
+#         """
+#         股市今天表现强劲，上证指数上涨2.3%，深证成指上涨1.8%。
+#         科技股领涨，多只股票涨停。分析师认为，这主要得益于近期出台的利好政策。
+#         投资者信心得到提振，市场交投活跃，成交量明显放大。
+#         """,
+#         """
+#         健康生活方式包括合理饮食、适量运动、充足睡眠和良好心态。
+#         建议每天摄入蔬菜水果，减少油腻食物；每周至少运动3次，每次30分钟以上；
+#         保证7-8小时睡眠；学会调节情绪，保持积极乐观的心态。
+#         """
+#     ]
     
-    text_categories = ['科技', '生活', '财经', '健康']
+#     text_categories = ['科技', '生活', '财经', '健康']
     
-    # 创建数据框
-    unstructured_df = pd.DataFrame({
-        '文本': unstructured_texts,
-        '类别': text_categories
-    })
+#     # 创建数据框
+#     unstructured_df = pd.DataFrame({
+#         '文本': unstructured_texts,
+#         '类别': text_categories
+#     })
     
-    print("非结构化文本数据示例：")
-    for i, row in unstructured_df.iterrows():
-        print(f"\n类别：{row['类别']}")
-        print(f"文本：{row['文本'][:100]}...")
+#     print("非结构化文本数据示例：")
+#     for i, row in unstructured_df.iterrows():
+#         print(f"\n类别：{row['类别']}")
+#         print(f"文本：{row['文本'][:100]}...")
     
-    return unstructured_df
+#     return unstructured_df
+
+# # 运行示例
+# unstructured_text_df = unstructured_text_example()
+
+# # 文本数据处理方法
+# import jieba, re
+# import numpy as np
+# import pandas as pd
+# from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
+# from sklearn.preprocessing import LabelEncoder
+
+# class TextDataProcessor:
+#     def __init__(self):
+#         self.vectorizers = {}
+#         self.label_encoders = {}
+    
+#     def clean_text(self, text):
+#         """文本清洗"""
+#         # 移除特殊字符和数字
+#         text = re.sub(r'[^\u4e00-\u9fff\s]', '', text)
+#         # 移除多余空格
+#         text = re.sub(r'\s+', ' ', text).strip()
+#         return text
+    
+#     def tokenize_chinese(self, text):
+#         """中文分词"""
+#         words = jieba.lcut(text)
+#         # 移除停用词（简化版）
+#         stop_words = {'的', '了', '在', '是', '我', '有', '和', '就', '不', '人', '都', '一', '一个', '上', '也', '很', '到', '说', '要', '去', '你', '会', '着', '没有', '看', '好', '自己', '这'}
+#         words = [word for word in words if word not in stop_words and len(word) > 1]
+#         return words
+    
+#     def extract_features(self, texts, method='tfidf'):
+#         """特征提取"""
+#         # 文本预处理
+#         cleaned_texts = [self.clean_text(text) for text in texts]
+
+#         def chinese_tokenizer(text):
+#             return self.tokenize_chinese(text)
+        
+#         if method == 'tfidf':         
+#             vectorizer = TfidfVectorizer(max_features=1000, tokenizer=chinese_tokenizer, token_pattern=None)
+#         elif method == 'count':
+#             vectorizer = CountVectorizer(max_features=1000, tokenizer=chinese_tokenizer, token_pattern=None)
+#         else:
+#             raise ValueError("方法必须是 'tfidf' 或 'count'")
+        
+#         features = vectorizer.fit_transform(cleaned_texts)
+#         self.vectorizers[method] = vectorizer
+        
+#         return features.toarray(), vectorizer.get_feature_names_out()
+    
+#     def analyze_text_statistics(self, texts):
+#         """文本统计分析"""
+#         stats = []
+        
+#         for text in texts:
+#             cleaned_text = self.clean_text(text)
+#             words = self.tokenize_chinese(cleaned_text)
+            
+#             stats.append({
+#                 '字符数': len(text),
+#                 '清洗后字符数': len(cleaned_text),
+#                 '词数': len(words),
+#                 '平均词长': np.mean([len(word) for word in words]) if words else 0,
+#                 '唯一词数': len(set(words))
+#             })
+        
+#         return pd.DataFrame(stats)
+    
+#     def encode_labels(self, labels):
+#         """标签编码"""
+#         encoder = LabelEncoder()
+#         encoded_labels = encoder.fit_transform(labels)
+#         self.label_encoders['default'] = encoder
+#         return encoded_labels, encoder.classes_
+
+# # 使用示例
+# text_processor = TextDataProcessor()
+
+# # 文本统计分析
+# text_stats = text_processor.analyze_text_statistics(unstructured_text_df['文本'])
+# print("\n文本统计分析：")
+# print(text_stats)
+
+# # 特征提取
+# features, feature_names = text_processor.extract_features(
+#     unstructured_text_df['文本'], method='tfidf'
+# )
+# print(f"\n特征矩阵形状：{features.shape}")
+# print(f"前10个特征：{feature_names[:10]}")
+
+# # 标签编码
+# encoded_labels, label_classes = text_processor.encode_labels(
+#     unstructured_text_df['类别']
+# )
+# print(f"\n编码后的标签：{encoded_labels}")
+# print(f"标签类别：{label_classes}")
+
+
+# 图像型数据
+
+# 图像型数据的分类
+# 1. 灰度图像
+
+
+# 灰度图像示例
+import numpy as np
+import matplotlib.pyplot as plt
+from PIL import Image
+
+def grayscale_image_example():
+    """灰度图像示例"""
+    
+    print("\n=== 灰度图像示例 ===")
+    
+    # 创建简单的灰度图像
+    # 创建一个 100x100 的灰度图像
+    height, width = 100, 100
+    
+    # 创建渐变图像
+    gradient = np.zeros((height, width))
+    for i in range(height):
+        gradient[i, :] = i  # 垂直渐变
+    
+    # 创建棋盘图案
+    checkerboard = np.zeros((height, width))
+    for i in range(0, height, 10):
+        for j in range(0, width, 10):
+            if (i // 10 + j // 10) % 2 == 0:
+                checkerboard[i:i+10, j:j+10] = 255
+    
+    # 创建圆形图案
+    circle = np.zeros((height, width))
+    center_x, center_y = width // 2, height // 2
+    radius = 30
+    for i in range(height):
+        for j in range(width):
+            if (i - center_y) ** 2 + (j - center_x) ** 2 <= radius ** 2:
+                circle[i, j] = 255
+    
+    # 显示图像
+    plt.figure(figsize=(12, 4))
+    
+    plt.subplot(1, 3, 1)
+    plt.imshow(gradient, cmap='gray')
+    plt.title('渐变图像')
+    plt.axis('off')
+    
+    plt.subplot(1, 3, 2)
+    plt.imshow(checkerboard, cmap='gray')
+    plt.title('棋盘图案')
+    plt.axis('off')
+    
+    plt.subplot(1, 3, 3)
+    plt.imshow(circle, cmap='gray')
+    plt.title('圆形图案')
+    plt.axis('off')
+    
+    plt.tight_layout()
+    plt.show()
+    
+    # 图像数据信息
+    print(f"渐变图像形状：{gradient.shape}")
+    print(f"数据类型：{gradient.dtype}")
+    print(f"像素值范围：{gradient.min()} - {gradient.max()}")
+    
+    return gradient, checkerboard, circle
 
 # 运行示例
-unstructured_text_df = unstructured_text_example()
+gradient_img, checkerboard_img, circle_img = grayscale_image_example()
 
-# 文本数据处理方法
-import jieba, re
-import numpy as np
-import pandas as pd
-from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
-from sklearn.preprocessing import LabelEncoder
 
-class TextDataProcessor:
-    def __init__(self):
-        self.vectorizers = {}
-        self.label_encoders = {}
-    
-    def clean_text(self, text):
-        """文本清洗"""
-        # 移除特殊字符和数字
-        text = re.sub(r'[^\u4e00-\u9fff\s]', '', text)
-        # 移除多余空格
-        text = re.sub(r'\s+', ' ', text).strip()
-        return text
-    
-    def tokenize_chinese(self, text):
-        """中文分词"""
-        words = jieba.lcut(text)
-        # 移除停用词（简化版）
-        stop_words = {'的', '了', '在', '是', '我', '有', '和', '就', '不', '人', '都', '一', '一个', '上', '也', '很', '到', '说', '要', '去', '你', '会', '着', '没有', '看', '好', '自己', '这'}
-        words = [word for word in words if word not in stop_words and len(word) > 1]
-        return words
-    
-    def extract_features(self, texts, method='tfidf'):
-        """特征提取"""
-        # 文本预处理
-        cleaned_texts = [self.clean_text(text) for text in texts]
+# 2. 彩色图像
 
-        def chinese_tokenizer(text):
-            return self.tokenize_chinese(text)
-        
-        if method == 'tfidf':         
-            vectorizer = TfidfVectorizer(max_features=1000, tokenizer=chinese_tokenizer, token_pattern=None)
-        elif method == 'count':
-            vectorizer = CountVectorizer(max_features=1000, tokenizer=chinese_tokenizer, token_pattern=None)
+# 彩色图像示例
+def color_image_example():
+    """彩色图像示例"""
+    
+    print("\n=== 彩色图像示例 ===")
+    
+    height, width = 100, 100
+    
+    # 创建 RGB 彩色图像
+    # 红色渐变
+    red_gradient = np.zeros((height, width, 3), dtype=np.uint8)
+    red_gradient[:, :, 0] = np.linspace(0, 255, width)  # 红色通道渐变
+    
+    # 绿色渐变
+    green_gradient = np.zeros((height, width, 3), dtype=np.uint8)
+    green_gradient[:, :, 1] = np.linspace(0, 255, width)  # 绿色通道渐变
+    
+    # 蓝色渐变
+    blue_gradient = np.zeros((height, width, 3), dtype=np.uint8)
+    blue_gradient[:, :, 2] = np.linspace(0, 255, width)  # 蓝色通道渐变
+    
+    # 彩虹图案
+    rainbow = np.zeros((height, width, 3), dtype=np.uint8)
+    for i in range(width):
+        hue = i / width
+        # 简化的 HSV 到 RGB 转换
+        if hue < 1/3:
+            rainbow[:, i] = [255 * (1 - 3*hue), 255 * 3*hue, 0]
+        elif hue < 2/3:
+            rainbow[:, i] = [0, 255 * (2 - 3*hue), 255 * (3*hue - 1)]
         else:
-            raise ValueError("方法必须是 'tfidf' 或 'count'")
-        
-        features = vectorizer.fit_transform(cleaned_texts)
-        self.vectorizers[method] = vectorizer
-        
-        return features.toarray(), vectorizer.get_feature_names_out()
+            rainbow[:, i] = [255 * (3*hue - 2), 0, 255 * (3 - 3*hue)]
     
-    def analyze_text_statistics(self, texts):
-        """文本统计分析"""
-        stats = []
-        
-        for text in texts:
-            cleaned_text = self.clean_text(text)
-            words = self.tokenize_chinese(cleaned_text)
-            
-            stats.append({
-                '字符数': len(text),
-                '清洗后字符数': len(cleaned_text),
-                '词数': len(words),
-                '平均词长': np.mean([len(word) for word in words]) if words else 0,
-                '唯一词数': len(set(words))
-            })
-        
-        return pd.DataFrame(stats)
+    # 显示图像
+    plt.figure(figsize=(12, 8))
     
-    def encode_labels(self, labels):
-        """标签编码"""
-        encoder = LabelEncoder()
-        encoded_labels = encoder.fit_transform(labels)
-        self.label_encoders['default'] = encoder
-        return encoded_labels, encoder.classes_
+    plt.subplot(2, 2, 1)
+    plt.imshow(red_gradient)
+    plt.title('红色渐变')
+    plt.axis('off')
+    
+    plt.subplot(2, 2, 2)
+    plt.imshow(green_gradient)
+    plt.title('绿色渐变')
+    plt.axis('off')
+    
+    plt.subplot(2, 2, 3)
+    plt.imshow(blue_gradient)
+    plt.title('蓝色渐变')
+    plt.axis('off')
+    
+    plt.subplot(2, 2, 4)
+    plt.imshow(rainbow)
+    plt.title('彩虹图案')
+    plt.axis('off')
+    
+    plt.tight_layout()
+    plt.show()
+    
+    # 图像通道信息
+    print(f"彩色图像形状：{rainbow.shape}")
+    print(f"数据类型：{rainbow.dtype}")
+    print(f"像素值范围：{rainbow.min()} - {rainbow.max()}")
+    
+    return red_gradient, green_gradient, blue_gradient, rainbow
 
-# 使用示例
-text_processor = TextDataProcessor()
+# 运行示例
+red_img, green_img, blue_img, rainbow_img = color_image_example()
 
-# 文本统计分析
-text_stats = text_processor.analyze_text_statistics(unstructured_text_df['文本'])
-print("\n文本统计分析：")
-print(text_stats)
 
-# 特征提取
-features, feature_names = text_processor.extract_features(
-    unstructured_text_df['文本'], method='tfidf'
-)
-print(f"\n特征矩阵形状：{features.shape}")
-print(f"前10个特征：{feature_names[:10]}")
 
-# 标签编码
-encoded_labels, label_classes = text_processor.encode_labels(
-    unstructured_text_df['类别']
-)
-print(f"\n编码后的标签：{encoded_labels}")
-print(f"标签类别：{label_classes}")
+
+
+
+
+
+
+
 
 
 
