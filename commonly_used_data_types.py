@@ -583,17 +583,17 @@ def grayscale_image_example():
     
     plt.subplot(1, 3, 1)
     plt.imshow(gradient, cmap='gray')
-    plt.title('渐变图像')
+    plt.title('Gradient pattern')
     plt.axis('off')
     
     plt.subplot(1, 3, 2)
     plt.imshow(checkerboard, cmap='gray')
-    plt.title('棋盘图案')
+    plt.title('Checkerboard pattern')
     plt.axis('off')
     
     plt.subplot(1, 3, 3)
     plt.imshow(circle, cmap='gray')
-    plt.title('圆形图案')
+    plt.title('Circular pattern')
     plt.axis('off')
     
     plt.tight_layout()
@@ -650,22 +650,22 @@ def color_image_example():
     
     plt.subplot(2, 2, 1)
     plt.imshow(red_gradient)
-    plt.title('红色渐变')
+    plt.title('Red Gradient')
     plt.axis('off')
     
     plt.subplot(2, 2, 2)
     plt.imshow(green_gradient)
-    plt.title('绿色渐变')
+    plt.title('Green Gradient')
     plt.axis('off')
     
     plt.subplot(2, 2, 3)
     plt.imshow(blue_gradient)
-    plt.title('蓝色渐变')
+    plt.title('Blue Gradient')
     plt.axis('off')
     
     plt.subplot(2, 2, 4)
     plt.imshow(rainbow)
-    plt.title('彩虹图案')
+    plt.title('Rainbow Pattern')
     plt.axis('off')
     
     plt.tight_layout()
@@ -682,8 +682,149 @@ def color_image_example():
 red_img, green_img, blue_img, rainbow_img = color_image_example()
 
 
+# 图像数据处理方法
+from skimage import filters, feature, measure, transform
+from skimage.color import rgb2gray, rgb2hsv
 
+class ImageDataProcessor:
+    def __init__(self):
+        pass
+    
+    def resize_image(self, image, target_size):
+        """调整图像大小"""
+        from skimage.transform import resize
+        return resize(image, target_size, anti_aliasing=True)
+    
+    def normalize_image(self, image):
+        """图像归一化"""
+        return (image - image.min()) / (image.max() - image.min())
+    
+    def extract_color_features(self, image):
+        """提取颜色特征"""
+        if len(image.shape) == 3:  # 彩色图像
+            # 计算各通道的统计特征
+            features = {}
+            for i, channel in enumerate(['R', 'G', 'B']):
+                channel_data = image[:, :, i]
+                features[f'{channel}_mean'] = np.mean(channel_data)
+                features[f'{channel}_std'] = np.std(channel_data)
+                features[f'{channel}_min'] = np.min(channel_data)
+                features[f'{channel}_max'] = np.max(channel_data)
+            
+            # 计算颜色直方图特征
+            hist_r, _ = np.histogram(image[:, :, 0], bins=256, range=(0, 256))
+            hist_g, _ = np.histogram(image[:, :, 1], bins=256, range=(0, 256))
+            hist_b, _ = np.histogram(image[:, :, 2], bins=256, range=(0, 256))
+            
+            features.update({
+                'hist_r_peak': np.argmax(hist_r),
+                'hist_g_peak': np.argmax(hist_g),
+                'hist_b_peak': np.argmax(hist_b)
+            })
+            
+            return features
+        else:  # 灰度图像
+            return {
+                'mean': np.mean(image),
+                'std': np.std(image),
+                'min': np.min(image),
+                'max': np.max(image)
+            }
+    
+    def extract_texture_features(self, image):
+        """提取纹理特征"""
+        if len(image.shape) == 3:
+            image = rgb2gray(image)
+        
+        # 计算边缘特征
+        edges = filters.sobel(image)
+        edge_density = np.sum(edges > 0) / edges.size
+        
+        # 计算局部二值模式（简化版）
+        lbp = feature.local_binary_pattern(image, P=8, R=1, method='uniform')
+        lbp_hist, _ = np.histogram(lbp.ravel(), bins=10)
+        
+        return {
+            'edge_density': edge_density,
+            'lbp_hist': lbp_hist.tolist()
+        }
+    
+    def augment_image(self, image):
+        """图像增强"""
+        augmented = []
+        
+        # 原图
+        augmented.append(image)
+        
+        # 水平翻转
+        augmented.append(np.fliplr(image))
+        
+        # 垂直翻转
+        augmented.append(np.flipud(image))
+        
+        # 旋转90度
+        augmented.append(np.rot90(image))
+        
+        # 亮度调整
+        if len(image.shape) == 3:
+            brightened = np.clip(image * 1.2, 0, 255).astype(np.uint8)
+        else:
+            brightened = np.clip(image * 1.2, 0, 1)
+        augmented.append(brightened)
+        
+        return augmented
+    
+    def visualize_image_channels(self, image):
+        """可视化图像通道"""
+        if len(image.shape) == 3:
+            plt.figure(figsize=(12, 3))
+            
+            plt.subplot(1, 4, 1)
+            plt.imshow(image)
+            plt.title('原始图像')
+            plt.axis('off')
+            
+            plt.subplot(1, 4, 2)
+            plt.imshow(image[:, :, 0], cmap='Reds')
+            plt.title('红色通道')
+            plt.axis('off')
+            
+            plt.subplot(1, 4, 3)
+            plt.imshow(image[:, :, 1], cmap='Greens')
+            plt.title('绿色通道')
+            plt.axis('off')
+            
+            plt.subplot(1, 4, 4)
+            plt.imshow(image[:, :, 2], cmap='Blues')
+            plt.title('蓝色通道')
+            plt.axis('off')
+            
+            plt.tight_layout()
+            plt.show()
 
+# 使用示例
+image_processor = ImageDataProcessor()
+
+# 提取颜色特征
+color_features = image_processor.extract_color_features(rainbow_img)
+print("\n颜色特征：")
+for key, value in color_features.items():
+    if not key.startswith('hist'):
+        print(f"{key}: {value:.2f}")
+
+# 提取纹理特征
+texture_features = image_processor.extract_texture_features(checkerboard_img)
+print("\n纹理特征：")
+for key, value in texture_features.items():
+    if key != 'lbp_hist':
+        print(f"{key}: {value:.4f}")
+
+# 图像增强
+augmented_images = image_processor.augment_image(circle_img)
+print(f"\n图像增强：生成了 {len(augmented_images)} 个变体")
+
+# 可视化图像通道
+image_processor.visualize_image_channels(rainbow_img)
 
 
 
