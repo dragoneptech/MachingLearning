@@ -213,101 +213,101 @@
 # 数值型数据的处理方法
 
 # 数值型数据处理方法
-# class NumericDataProcessor:
-#     def __init__(self):
-#         self.scalers = {}
-#         self.transformers = {}
+class NumericDataProcessor:
+    def __init__(self):
+        self.scalers = {}
+        self.transformers = {}
     
-#     def detect_outliers(self, data, method='iqr'):
-#         """检测异常值"""
-#         outliers_info = {}
+    def detect_outliers(self, data, method='iqr'):
+        """检测异常值"""
+        outliers_info = {}
         
-#         for column in data.select_dtypes(include=[np.number]).columns:
-#             if method == 'iqr':
-#                 Q1 = data[column].quantile(0.25)
-#                 Q3 = data[column].quantile(0.75)
-#                 IQR = Q3 - Q1
-#                 lower_bound = Q1 - 1.5 * IQR
-#                 upper_bound = Q3 + 1.5 * IQR
+        for column in data.select_dtypes(include=[np.number]).columns:
+            if method == 'iqr':
+                Q1 = data[column].quantile(0.25)
+                Q3 = data[column].quantile(0.75)
+                IQR = Q3 - Q1
+                lower_bound = Q1 - 1.5 * IQR
+                upper_bound = Q3 + 1.5 * IQR
                 
-#                 outliers = data[(data[column] < lower_bound) | 
-#                                (data[column] > upper_bound)]
+                outliers = data[(data[column] < lower_bound) | 
+                               (data[column] > upper_bound)]
                 
-#             elif method == 'zscore':
-#                 z_scores = np.abs((data[column] - data[column].mean()) / data[column].std())
-#                 outliers = data[z_scores > 3]
+            elif method == 'zscore':
+                z_scores = np.abs((data[column] - data[column].mean()) / data[column].std())
+                outliers = data[z_scores > 3]
             
-#             outliers_info[column] = {
-#                 'count': len(outliers),
-#                 'indices': outliers.index.tolist(),
-#                 'percentage': (len(outliers) / len(data)) * 100
-#             }
+            outliers_info[column] = {
+                'count': len(outliers),
+                'indices': outliers.index.tolist(),
+                'percentage': (len(outliers) / len(data)) * 100
+            }
         
-#         return outliers_info
+        return outliers_info
     
-#     def handle_missing_values(self, data, strategy='mean'):
-#         """处理缺失值"""
-#         processed_data = data.copy()
+    def handle_missing_values(self, data, strategy='mean'):
+        """处理缺失值"""
+        processed_data = data.copy()
         
-#         for column in processed_data.select_dtypes(include=[np.number]).columns:
-#             if processed_data[column].isnull().sum() > 0:
-#                 if strategy == 'mean':
-#                     processed_data[column].fillna(processed_data[column].mean(), inplace=True)
-#                 elif strategy == 'median':
-#                     processed_data[column].fillna(processed_data[column].median(), inplace=True)
-#                 elif strategy == 'mode':
-#                     processed_data[column].fillna(processed_data[column].mode()[0], inplace=True)
-#                 elif strategy == 'forward':
-#                     # processed_data[column].fillna(method='ffill', inplace=True)
-#                     processed_data[column].ffill(inplace=True)
-#                 elif strategy == 'backward':
-#                     # processed_data[column].fillna(method='bfill', inplace=True)
-#                     processed_data[column].bfill(inplace=True)
+        for column in processed_data.select_dtypes(include=[np.number]).columns:
+            if processed_data[column].isnull().sum() > 0:
+                if strategy == 'mean':
+                    processed_data[column].fillna(processed_data[column].mean(), inplace=True)
+                elif strategy == 'median':
+                    processed_data[column].fillna(processed_data[column].median(), inplace=True)
+                elif strategy == 'mode':
+                    processed_data[column].fillna(processed_data[column].mode()[0], inplace=True)
+                elif strategy == 'forward':
+                    # processed_data[column].fillna(method='ffill', inplace=True)
+                    processed_data[column].ffill(inplace=True)
+                elif strategy == 'backward':
+                    # processed_data[column].fillna(method='bfill', inplace=True)
+                    processed_data[column].bfill(inplace=True)
         
-#         return processed_data
+        return processed_data
     
-#     def normalize_data(self, data, method='minmax'):
-#         """数据标准化"""
-#         from sklearn.preprocessing import MinMaxScaler, StandardScaler, RobustScaler
+    def normalize_data(self, data, method='minmax'):
+        """数据标准化"""
+        from sklearn.preprocessing import MinMaxScaler, StandardScaler, RobustScaler
         
-#         processed_data = data.copy()
-#         numeric_columns = data.select_dtypes(include=[np.number]).columns
+        processed_data = data.copy()
+        numeric_columns = data.select_dtypes(include=[np.number]).columns
         
-#         if method == 'minmax':
-#             scaler = MinMaxScaler()
-#         elif method == 'standard':
-#             scaler = StandardScaler()
-#         elif method == 'robust':
-#             scaler = RobustScaler()
-#         else:
-#             raise ValueError("方法必须是 'minmax', 'standard', 或 'robust'")
+        if method == 'minmax':
+            scaler = MinMaxScaler()
+        elif method == 'standard':
+            scaler = StandardScaler()
+        elif method == 'robust':
+            scaler = RobustScaler()
+        else:
+            raise ValueError("方法必须是 'minmax', 'standard', 或 'robust'")
         
-#         processed_data[numeric_columns] = scaler.fit_transform(processed_data[numeric_columns])
-#         self.scalers[method] = scaler
+        processed_data[numeric_columns] = scaler.fit_transform(processed_data[numeric_columns])
+        self.scalers[method] = scaler
         
-#         return processed_data
+        return processed_data
     
-#     def create_features(self, data):
-#         """特征工程"""
-#         processed_data = data.copy()
-#         numeric_columns = data.select_dtypes(include=[np.number]).columns
+    def create_features(self, data):
+        """特征工程"""
+        processed_data = data.copy()
+        numeric_columns = data.select_dtypes(include=[np.number]).columns
         
-#         # 创建多项式特征
-#         if len(numeric_columns) >= 2:
-#             col1, col2 = numeric_columns[0], numeric_columns[1]
-#             processed_data[f'{col1}_x_{col2}'] = data[col1] * data[col2]
-#             processed_data[f'{col1}_div_{col2}'] = data[col1] / (data[col2] + 1e-8)
+        # 创建多项式特征
+        if len(numeric_columns) >= 2:
+            col1, col2 = numeric_columns[0], numeric_columns[1]
+            processed_data[f'{col1}_x_{col2}'] = data[col1] * data[col2]
+            processed_data[f'{col1}_div_{col2}'] = data[col1] / (data[col2] + 1e-8)
         
-#         # 创建统计特征
-#         for column in numeric_columns:
-#             processed_data[f'{column}_log'] = np.log1p(data[column])
-#             processed_data[f'{column}_sqrt'] = np.sqrt(np.abs(data[column]))
-#             processed_data[f'{column}_square'] = data[column] ** 2
+        # 创建统计特征
+        for column in numeric_columns:
+            processed_data[f'{column}_log'] = np.log1p(data[column])
+            processed_data[f'{column}_sqrt'] = np.sqrt(np.abs(data[column]))
+            processed_data[f'{column}_square'] = data[column] ** 2
         
-#         return processed_data
+        return processed_data
 
-# # 使用示例
-# processor = NumericDataProcessor()
+# 使用示例
+processor = NumericDataProcessor()
 
 # # 检测异常值
 # outliers = processor.detect_outliers(continuous_df)
@@ -442,80 +442,80 @@
 # unstructured_text_df = unstructured_text_example()
 
 # # 文本数据处理方法
-# import jieba, re
-# import numpy as np
-# import pandas as pd
-# from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
-# from sklearn.preprocessing import LabelEncoder
+import jieba, re
+import numpy as np
+import pandas as pd
+from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
+from sklearn.preprocessing import LabelEncoder
 
-# class TextDataProcessor:
-#     def __init__(self):
-#         self.vectorizers = {}
-#         self.label_encoders = {}
+class TextDataProcessor:
+    def __init__(self):
+        self.vectorizers = {}
+        self.label_encoders = {}
     
-#     def clean_text(self, text):
-#         """文本清洗"""
-#         # 移除特殊字符和数字
-#         text = re.sub(r'[^\u4e00-\u9fff\s]', '', text)
-#         # 移除多余空格
-#         text = re.sub(r'\s+', ' ', text).strip()
-#         return text
+    def clean_text(self, text):
+        """文本清洗"""
+        # 移除特殊字符和数字
+        text = re.sub(r'[^\u4e00-\u9fff\s]', '', text)
+        # 移除多余空格
+        text = re.sub(r'\s+', ' ', text).strip()
+        return text
     
-#     def tokenize_chinese(self, text):
-#         """中文分词"""
-#         words = jieba.lcut(text)
-#         # 移除停用词（简化版）
-#         stop_words = {'的', '了', '在', '是', '我', '有', '和', '就', '不', '人', '都', '一', '一个', '上', '也', '很', '到', '说', '要', '去', '你', '会', '着', '没有', '看', '好', '自己', '这'}
-#         words = [word for word in words if word not in stop_words and len(word) > 1]
-#         return words
+    def tokenize_chinese(self, text):
+        """中文分词"""
+        words = jieba.lcut(text)
+        # 移除停用词（简化版）
+        stop_words = {'的', '了', '在', '是', '我', '有', '和', '就', '不', '人', '都', '一', '一个', '上', '也', '很', '到', '说', '要', '去', '你', '会', '着', '没有', '看', '好', '自己', '这'}
+        words = [word for word in words if word not in stop_words and len(word) > 1]
+        return words
     
-#     def extract_features(self, texts, method='tfidf'):
-#         """特征提取"""
-#         # 文本预处理
-#         cleaned_texts = [self.clean_text(text) for text in texts]
+    def extract_features(self, texts, method='tfidf'):
+        """特征提取"""
+        # 文本预处理
+        cleaned_texts = [self.clean_text(text) for text in texts]
 
-#         def chinese_tokenizer(text):
-#             return self.tokenize_chinese(text)
+        def chinese_tokenizer(text):
+            return self.tokenize_chinese(text)
         
-#         if method == 'tfidf':         
-#             vectorizer = TfidfVectorizer(max_features=1000, tokenizer=chinese_tokenizer, token_pattern=None)
-#         elif method == 'count':
-#             vectorizer = CountVectorizer(max_features=1000, tokenizer=chinese_tokenizer, token_pattern=None)
-#         else:
-#             raise ValueError("方法必须是 'tfidf' 或 'count'")
+        if method == 'tfidf':         
+            vectorizer = TfidfVectorizer(max_features=1000, tokenizer=chinese_tokenizer, token_pattern=None)
+        elif method == 'count':
+            vectorizer = CountVectorizer(max_features=1000, tokenizer=chinese_tokenizer, token_pattern=None)
+        else:
+            raise ValueError("方法必须是 'tfidf' 或 'count'")
         
-#         features = vectorizer.fit_transform(cleaned_texts)
-#         self.vectorizers[method] = vectorizer
+        features = vectorizer.fit_transform(cleaned_texts)
+        self.vectorizers[method] = vectorizer
         
-#         return features.toarray(), vectorizer.get_feature_names_out()
+        return features.toarray(), vectorizer.get_feature_names_out()
     
-#     def analyze_text_statistics(self, texts):
-#         """文本统计分析"""
-#         stats = []
+    def analyze_text_statistics(self, texts):
+        """文本统计分析"""
+        stats = []
         
-#         for text in texts:
-#             cleaned_text = self.clean_text(text)
-#             words = self.tokenize_chinese(cleaned_text)
+        for text in texts:
+            cleaned_text = self.clean_text(text)
+            words = self.tokenize_chinese(cleaned_text)
             
-#             stats.append({
-#                 '字符数': len(text),
-#                 '清洗后字符数': len(cleaned_text),
-#                 '词数': len(words),
-#                 '平均词长': np.mean([len(word) for word in words]) if words else 0,
-#                 '唯一词数': len(set(words))
-#             })
+            stats.append({
+                '字符数': len(text),
+                '清洗后字符数': len(cleaned_text),
+                '词数': len(words),
+                '平均词长': np.mean([len(word) for word in words]) if words else 0,
+                '唯一词数': len(set(words))
+            })
         
-#         return pd.DataFrame(stats)
+        return pd.DataFrame(stats)
     
-#     def encode_labels(self, labels):
-#         """标签编码"""
-#         encoder = LabelEncoder()
-#         encoded_labels = encoder.fit_transform(labels)
-#         self.label_encoders['default'] = encoder
-#         return encoded_labels, encoder.classes_
+    def encode_labels(self, labels):
+        """标签编码"""
+        encoder = LabelEncoder()
+        encoded_labels = encoder.fit_transform(labels)
+        self.label_encoders['default'] = encoder
+        return encoded_labels, encoder.classes_
 
-# # 使用示例
-# text_processor = TextDataProcessor()
+# 使用示例
+text_processor = TextDataProcessor()
 
 # # 文本统计分析
 # text_stats = text_processor.analyze_text_statistics(unstructured_text_df['文本'])
@@ -610,9 +610,9 @@ def grayscale_image_example():
 gradient_img, checkerboard_img, circle_img = grayscale_image_example()
 
 
-# 2. 彩色图像
+# # 2. 彩色图像
 
-# 彩色图像示例
+# # 彩色图像示例
 def color_image_example():
     """彩色图像示例"""
     
@@ -682,7 +682,7 @@ def color_image_example():
 red_img, green_img, blue_img, rainbow_img = color_image_example()
 
 
-# 图像数据处理方法
+# # 图像数据处理方法
 from skimage import filters, feature, measure, transform
 from skimage.color import rgb2gray, rgb2hsv
 
@@ -692,8 +692,8 @@ class ImageDataProcessor:
     
     def resize_image(self, image, target_size):
         """调整图像大小"""
-        from skimage.transform import resize
-        return resize(image, target_size, anti_aliasing=True)
+        # from skimage.transform import resize
+        return transform.resize(image, target_size, anti_aliasing=True)
     
     def normalize_image(self, image):
         """图像归一化"""
@@ -781,22 +781,22 @@ class ImageDataProcessor:
             
             plt.subplot(1, 4, 1)
             plt.imshow(image)
-            plt.title('原始图像')
+            plt.title('Original Image')
             plt.axis('off')
             
             plt.subplot(1, 4, 2)
             plt.imshow(image[:, :, 0], cmap='Reds')
-            plt.title('红色通道')
+            plt.title('Red Channel')
             plt.axis('off')
             
             plt.subplot(1, 4, 3)
             plt.imshow(image[:, :, 1], cmap='Greens')
-            plt.title('绿色通道')
+            plt.title('Green Channel')
             plt.axis('off')
             
             plt.subplot(1, 4, 4)
             plt.imshow(image[:, :, 2], cmap='Blues')
-            plt.title('蓝色通道')
+            plt.title('Blue Channel')
             plt.axis('off')
             
             plt.tight_layout()
@@ -826,15 +826,396 @@ print(f"\n图像增强：生成了 {len(augmented_images)} 个变体")
 # 可视化图像通道
 image_processor.visualize_image_channels(rainbow_img)
 
+# 类别型数据 categorical data: 名义型、有序型数据
 
+# 类别型数据就像分类标签，表示不同的类别或分组，不能进行数学运算
 
+# 类别型数据的分类
+# 1. 名义型数据
 
+# 名义型数据示例+
+import pandas as pd
+import numpy as np
 
+def nominal_data_example():
+    """名义型数据示例"""
+    
+    print("\n=== 名义型数据示例 ===")
+    
+    # 创建名义型数据
+    nominal_data = pd.DataFrame({
+        '学生ID': range(1, 11),
+        '姓名': ['张三', '李四', '王五', '赵六', '钱七', '孙八', '周九', '吴十', '郑十一', '陈十二'],
+        '性别': ['男', '女', '男', '男', '女', '女', '男', '女', '男', '女'],
+        '血型': ['A', 'B', 'O', 'AB', 'A', 'B', 'O', 'AB', 'A', 'O'],
+        '城市': ['北京', '上海', '广州', '深圳', '北京', '上海', '广州', '深圳', '北京', '上海'],
+        '专业': ['计算机', '数学', '物理', '化学', '计算机', '数学', '物理', '化学', '计算机', '数学']
+    })
+    
+    print("名义型数据示例：")
+    print(nominal_data)
+    
+    # 类别统计分析
+    print("\n=== 类别统计分析 ===")
+    
+    for column in nominal_data.select_dtypes(include=['object', 'str']).columns:
+        if column != '姓名':  # 跳过姓名列
+            value_counts = nominal_data[column].value_counts()
+            print(f"\n{column} 分布：")
+            print(value_counts)
+            print(f"唯一值数量：{len(value_counts)}")
+    
+    return nominal_data
 
+# 运行示例
+nominal_df = nominal_data_example()
 
+# # 2. 有序型数据
 
+# # 有序型数据示例
+# import pandas as pd
 
+# def ordinal_data_example():
+#     """有序型数据示例"""
+    
+#     print("\n=== 有序型数据示例 ===")
+    
+#     # 创建有序型数据
+#     ordinal_data = pd.DataFrame({
+#         '产品ID': range(1, 11),
+#         '产品名称': [f'产品{i}' for i in range(1, 11)],
+#         '质量等级': ['优秀', '良好', '一般', '优秀', '良好', '一般', '差', '优秀', '良好', '一般'],
+#         '客户满意度': ['非常满意', '满意', '一般', '非常满意', '满意', '一般', '不满意', '非常满意', '满意', '一般'],
+#         '价格区间': ['高', '中', '低', '高', '中', '低', '低', '高', '中', '中'],
+#         '销量排名': [1, 3, 5, 2, 4, 7, 9, 6, 8, 10]
+#     })
+    
+#     print("有序型数据示例：")
+#     print(ordinal_data)
+    
+#     # 有序数据统计分析
+#     print("\n=== 有序数据统计分析 ===")
+    
+#     # 定义顺序
+#     quality_order = ['差', '一般', '良好', '优秀']
+#     satisfaction_order = ['不满意', '一般', '满意', '非常满意']
+#     price_order = ['低', '中', '高']
+    
+#     # 转换为有序类别
+#     ordinal_data['质量等级_有序'] = pd.Categorical(
+#         ordinal_data['质量等级'], categories=quality_order, ordered=True
+#     )
+#     ordinal_data['客户满意度_有序'] = pd.Categorical(
+#         ordinal_data['客户满意度'], categories=satisfaction_order, ordered=True
+#     )
+#     ordinal_data['价格区间_有序'] = pd.Categorical(
+#         ordinal_data['价格区间'], categories=price_order, ordered=True
+#     )
+    
+#     # 统计分析
+#     for column in ['质量等级_有序', '客户满意度_有序', '价格区间_有序']:
+#         print(f"\n{column} 分布：")
+#         value_counts = ordinal_data[column].value_counts().sort_index()
+#         print(value_counts)
+        
+#         # 计算中位数
+#         median_code = int(ordinal_data[column].cat.codes.median())
+#         median_value = ordinal_data[column].cat.categories[median_code]
+#         print(f"中位数：{median_value}")
+    
+#     return ordinal_data
 
+# # 运行示例
+# ordinal_df = ordinal_data_example()
 
+# # 类别型数据处理方法
+from sklearn.preprocessing import LabelEncoder, OneHotEncoder, OrdinalEncoder
 
+class CategoricalDataProcessor:
+    def __init__(self):
+        self.encoders = {}
+        self.feature_names = {}
+    
+    def label_encoding(self, data, columns):
+        """标签编码"""
+        encoded_data = data.copy()
+        
+        for column in columns:
+            encoder = LabelEncoder()
+            encoded_data[f'{column}_encoded'] = encoder.fit_transform(data[column])
+            self.encoders[f'{column}_label'] = encoder
+            
+            print(f"{column} 标签编码：")
+            for i, category in enumerate(encoder.classes_):
+                print(f"  {category} -> {i}")
+        
+        return encoded_data
+    
+    def one_hot_encoding(self, data, columns):
+        """独热编码"""
+        encoded_data = data.copy()
+        
+        for column in columns:
+            encoder = OneHotEncoder(sparse_output=False, drop='first')  # 避免多重共线性
+            encoded_features = encoder.fit_transform(data[[column]])
+            
+            # 创建新的列名
+            # feature_names = [f'{column}_{category}' for category in encoder.categories_[0][1:]]
+            feature_names = encoder.get_feature_names_out([column])
+            
+            # 添加到数据框
+            for i, feature_name in enumerate(feature_names):
+                encoded_data[feature_name] = encoded_features[:, i]
+            
+            self.encoders[f'{column}_onehot'] = encoder
+            self.feature_names[f'{column}_onehot'] = feature_names
+            
+            print(f"{column} 独热编码：创建了 {len(feature_names)} 个特征")
+        
+        return encoded_data
+    
+    def ordinal_encoding(self, data, columns, categories_list):
+        """有序编码"""
+        encoded_data = data.copy()
+        
+        for column, categories in zip(columns, categories_list):
+            encoder = OrdinalEncoder(categories=[categories])
+            encoded_data[f'{column}_ordinal'] = encoder.fit_transform(data[[column]])
+            self.encoders[f'{column}_ordinal'] = encoder
+            
+            print(f"{column} 有序编码：")
+            for i, category in enumerate(categories):
+                print(f"  {category} -> {i}")
+        
+        return encoded_data
+    
+    def target_encoding(self, data, categorical_column, target_column):
+        """目标编码"""
+        encoded_data = data.copy()
+        
+        # 计算每个类别的目标均值
+        target_means = data.groupby(categorical_column)[target_column].mean()
+        
+        # 应用编码
+        encoded_data[f'{categorical_column}_target'] = data[categorical_column].map(target_means)
+        
+        print(f"{categorical_column} 目标编码：")
+        for category, mean_value in target_means.items():
+            print(f"  {category} -> {mean_value:.4f}")
+        
+        return encoded_data
+    
+    def frequency_encoding(self, data, columns):
+        """频率编码"""
+        encoded_data = data.copy()
+        
+        for column in columns:
+            # 计算每个类别的频率
+            frequency = data[column].value_counts(normalize=True)
+            
+            # 应用编码
+            encoded_data[f'{column}_frequency'] = data[column].map(frequency)
+            
+            print(f"{column} 频率编码：")
+            for category, freq in frequency.head().items():
+                print(f"  {category} -> {freq:.4f}")
+        
+        return encoded_data
+    
+    def analyze_categorical_importance(self, data, categorical_columns, target_column):
+        """分析类别特征重要性"""
+        importance_scores = {}
+        
+        for column in categorical_columns:
+            # 计算每个类别的目标均值差异
+            category_means = data.groupby(column)[target_column].mean()
+            mean_difference = category_means.max() - category_means.min()
+            
+            # 计算类别数量
+            unique_count = data[column].nunique()
+            
+            # 简单的重要性评分
+            importance = mean_difference * np.log(unique_count + 1)
+            importance_scores[column] = importance
+        
+        # 排序
+        sorted_importance = sorted(importance_scores.items(), key=lambda x: x[1], reverse=True)
+        
+        print("\n类别特征重要性：")
+        for column, importance in sorted_importance:
+            print(f"{column}: {importance:.4f}")
+        
+        return importance_scores
+
+# 使用示例
+cat_processor = CategoricalDataProcessor()
+
+# 为名义型数据添加数值目标
+nominal_df_with_target = nominal_df.copy()
+nominal_df_with_target['成绩'] = np.random.randint(60, 100, len(nominal_df))
+
+# 标签编码
+label_encoded = cat_processor.label_encoding(
+    nominal_df_with_target, ['性别', '血型', '城市']
+)
+
+# 独热编码
+onehot_encoded = cat_processor.one_hot_encoding(
+    nominal_df_with_target, ['专业']
+)
+
+# 目标编码
+target_encoded = cat_processor.target_encoding(
+    nominal_df_with_target, '城市', '成绩'
+)
+
+# 频率编码
+frequency_encoded = cat_processor.frequency_encoding(
+    nominal_df_with_target, ['性别', '血型']
+)
+
+# 分析特征重要性
+importance_scores = cat_processor.analyze_categorical_importance(
+    nominal_df_with_target, ['性别', '血型', '城市', '专业'], '成绩'
+)
+
+# 多模态数据融合
+# 数据类型融合示例
+
+# 多模态数据融合示例
+import numpy as np
+import pandas as pd
+class MultiModalDataProcessor:
+    def __init__(self):
+        self.numeric_processor = NumericDataProcessor()
+        self.text_processor = TextDataProcessor()
+        self.image_processor = ImageDataProcessor()
+        self.categorical_processor = CategoricalDataProcessor()
+    
+    def create_multimodal_dataset(self):
+        """创建多模态数据集"""
+        print("\n=== 多模态数据集示例 ===")
+        
+        n_samples = 100
+        
+        # 数值特征
+        numeric_features = {
+            '年龄': np.random.randint(18, 65, n_samples),
+            '收入': np.random.normal(50000, 15000, n_samples),
+            '工作经验': np.random.randint(0, 20, n_samples)
+        }
+        
+        # 类别特征
+        categorical_features = {
+            '性别': np.random.choice(['男', '女'], n_samples),
+            '教育程度': np.random.choice(['高中', '本科', '硕士', '博士'], n_samples),
+            '城市': np.random.choice(['北京', '上海', '广州', '深圳'], n_samples)
+        }
+        
+        # 文本特征
+        text_features = [
+            f"这是第{i}个样本的文本描述，包含一些基本信息和特征。" 
+            for i in range(n_samples)
+        ]
+        
+        # 图像特征（模拟）
+        image_features = np.random.rand(n_samples, 64, 64, 3)  # 模拟64x64彩色图像
+        
+        # 目标变量
+        target = np.random.choice([0, 1], n_samples)
+        
+        # 创建数据集
+        dataset = {
+            'numeric': pd.DataFrame(numeric_features),
+            'categorical': pd.DataFrame(categorical_features),
+            'text': text_features,
+            'image': image_features,
+            'target': target
+        }
+        
+        print(f"数据集大小：{n_samples}")
+        print(f"数值特征：{list(numeric_features.keys())}")
+        print(f"类别特征：{list(categorical_features.keys())}")
+        print(f"文本特征：{len(text_features)} 条")
+        print(f"图像特征：{image_features.shape}")
+        print(f"目标变量：{np.bincount(target)}")
+        
+        return dataset
+    
+    def process_multimodal_data(self, dataset):
+        """处理多模态数据"""
+        print("\n=== 多模态数据处理 ===")
+        
+        processed_features = {}
+        
+        # 处理数值特征
+        numeric_data = dataset['numeric']
+        numeric_processed = self.numeric_processor.normalize_data(numeric_data, method='standard')
+        processed_features['numeric'] = numeric_processed
+        
+        # 处理类别特征
+        categorical_data = dataset['categorical']
+        categorical_processed = self.categorical_processor.one_hot_encoding(
+            categorical_data, list(categorical_data.columns)
+        )
+        # 只保留编码后的列
+        categorical_encoded = categorical_processed.select_dtypes(include=[np.number])
+        processed_features['categorical'] = categorical_encoded
+        
+        # 处理文本特征
+        text_data = dataset['text']
+        text_features, _ = self.text_processor.extract_features(text_data, method='tfidf')
+        processed_features['text'] = text_features
+        
+        # 处理图像特征
+        image_data = dataset['image']
+        # 提取简单的图像特征（均值、标准差等）
+        image_features = []
+        for img in image_data:
+            features = self.image_processor.extract_color_features(img)
+            feature_vector = list(features.values())[:10]  # 取前10个特征
+            image_features.append(feature_vector)
+        
+        processed_features['image'] = np.array(image_features)
+        
+        # 打印处理结果
+        for modality, features in processed_features.items():
+            if isinstance(features, pd.DataFrame):
+                print(f"{modality} 特征：{features.shape}")
+            else:
+                print(f"{modality} 特征：{features.shape}")
+        
+        return processed_features
+    
+    def fuse_features(self, processed_features):
+        """特征融合"""
+        print("\n=== 特征融合 ===")
+        
+        # 将所有特征合并
+        feature_arrays = []
+        
+        for modality, features in processed_features.items():
+            if isinstance(features, pd.DataFrame):
+                feature_arrays.append(features.values)
+            else:
+                feature_arrays.append(features)
+        
+        # 水平拼接
+        fused_features = np.hstack(feature_arrays)
+        
+        print(f"融合后特征形状：{fused_features.shape}")
+        
+        return fused_features
+
+# 使用示例
+multimodal_processor = MultiModalDataProcessor()
+
+# 创建多模态数据集
+multimodal_dataset = multimodal_processor.create_multimodal_dataset()
+
+# 处理多模态数据
+processed_multimodal = multimodal_processor.process_multimodal_data(multimodal_dataset)
+
+# 特征融合
+fused_features = multimodal_processor.fuse_features(processed_multimodal)
 
